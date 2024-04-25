@@ -2,8 +2,8 @@
 # run.sh
 
 # Define distance metric and weight
-DISTANCE_METRIC="euclidean"
-WEIGHT="uniform"
+DISTANCE_METRIC="euclidean" # "euclidean" and "manhattan"
+WEIGHT="uniform"  # "uniform" and "distance"
 
 # Define the list of datasets
 DATASETS=("experimentA" "experimentB")
@@ -11,7 +11,7 @@ SAVE_DIR="./trainlog"
 
 # Define k start, end, and step
 K_START=3
-K_END=9
+K_END=59
 K_STEP=2
 
 # Loop over datasets

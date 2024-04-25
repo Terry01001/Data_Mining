@@ -13,5 +13,10 @@ def get_parser():
     parser.add_argument('--k_start', type=int, default=3, help='The starting value of k for the KNN classifier')
     parser.add_argument('--k_end', type=int, default=11, help='The ending value of k for the KNN classifier')
 
+    parser.add_argument('--n_estimators', type=int, default=10, help='The number of tree of random forest')
+    parser.add_argument('--n_start', type=int, default=10, help='The starting value of n for the random forest')
+    parser.add_argument('--n_end', type=int, default=100, help='The ending value of n for the random forest')
+    parser.add_argument('--model', type=str, default='RF', help='The model to use for the random forest')
+
     return parser
 
