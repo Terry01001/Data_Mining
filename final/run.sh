@@ -7,9 +7,15 @@ WEIGHT="uniform"  # "uniform" and "distance"
 
 # Define the list of datasets
 # DATASETS=("experimentA" "experimentB")
-DATAPATH='./dataset/Arrhythmia_Data_Set'
+DATAPATH='dataset/Arrhythmia_Data_Set'
 SAVE_DIR="./trainlog"
 k=5
+THRESHOLD=0.8
+N_CLUSTERS=5
+MAX_ITER=100
+TRAIN_NUM_CLASSES=8
+UNKNOWN_NUM_CLASSES=5
+
 
 # Define k start, end, and step
 # K_START=3
@@ -31,4 +37,4 @@ k=5
 # done
 
 
-python main.py --data_path $DATAPATH --k_value $k --weight $WEIGHT --save_dir $SAVE_DIR 
+python main.py --data_path $DATAPATH --k_value $k --weight $WEIGHT --save_dir $SAVE_DIR --threshold $THRESHOLD --n_clusters $N_CLUSTERS --max_iter $MAX_ITER --train_num_classes $TRAIN_NUM_CLASSES --unknown_num_classes $UNKNOWN_NUM_CLASSES

@@ -89,11 +89,11 @@ class KMEANS:
         all_data = np.array(all_data)
 
         # use tsne to reduce dimensionality and visualize
-        tsne = TSNE(n_components=2, random_state=42)
-        transformed_data = TSNE.fit_transform(all_data)
+        tsne = TSNE(n_components=2, random_state=42, perplexity=min(30, len(all_data)-1))
+        transformed_data = tsne.fit_transform(all_data)
 
         plt.figure(figsize=(10, 8))
-        scatter = plt.scatter(transformed_data[:, 0], transformed_data[:, 1], c=labels, cmap='viridis',alpha=0.6)
+        scatter = plt.scatter(transformed_data[:, 0], transformed_data[:, 1], c=labels, cmap='inferno',alpha=0.6) # viridis
         plt.colorbar(scatter)
         plt.title('Clusters visualized with t-SNE')
         plt.xlabel('t-SNE Feature 1')

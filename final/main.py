@@ -16,7 +16,9 @@ def main(args):
 
     knn = KNeighborsClassifier(n_neighbors=args.k_value, weights=args.weight)
 
+    y_train = y_train.values.ravel()
     knn.fit(X_train_normalize, y_train)
+    knn_predictions = knn.predict(X_test_normalize)
     
     # use a threshold to filter the confidece level, which is the probability of the class. Then use clustering to classify the data which is below the confidence level
     threshold = args.threshold
@@ -30,6 +32,17 @@ def main(args):
     kmeans = Kmeans.KMEANS(n_clusters=args.n_clusters, max_iter=args.max_iter)
 
     kmeans.fit(low_confidence_samples)
+    kmeans.plot_clusters()
+
+    cluster_labels = utils.assign_labels_to_cluster(args, kmeans.clusters, y_test, low_confidence_indices)
+    final_predictions = utils.merge_predictions(args, X_test_normalize, knn_predictions, cluster_labels, low_confidence_indices)
+
+    # y_test = y_test.values.ravel()
+    acc = accuracy_score(y_test, final_predictions)
+
+    logging.info(f"Accuracy={acc}")
+
+    print(f"Accuracy={acc}")
 
     
 
@@ -45,13 +58,15 @@ if __name__ == "__main__":
     if not os.path.exists(args.save_dir):
         os.makedirs(args.save_dir,exist_ok=True)
 
-    filemode = 'a'
-    if args.k_value == args.k_start:  
-        filemode = 'w'
+    filemode = 'w'
+    # if args.k_value == args.k_start:  
+    #     filemode = 'w'
+    logfilename = args.data_path.split("/")[-1]
+    
     
 
     logging.basicConfig(
-        filename=os.path.join(args.save_dir, f'experiment{args.data_path[-1]}_{args.distance_metric}_{args.weight}.log'),
+        filename=os.path.join(args.save_dir, f'{logfilename}.log'),
         level=logging.INFO,
         format='%(asctime)s %(levelname)s %(message)s',
         filemode=filemode
