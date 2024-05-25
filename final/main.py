@@ -37,7 +37,7 @@ def main(args):
         kmeans = Kmeans.KMEANS(n_clusters=args.n_clusters, max_iter=args.max_iter)
 
         kmeans.fit(low_confidence_samples)
-        kmeans.plot_clusters(args)
+        
 
         cluster_labels = utils.assign_labels_to_cluster(args, kmeans.clusters, y_test, low_confidence_indices)
         final_predictions = utils.merge_predictions(args, X_test, classification_predictions, cluster_labels, low_confidence_indices)
@@ -47,6 +47,8 @@ def main(args):
         accuracies_log.append(acc)
 
         logging.info(f"Trial {trial}, Accuracy={acc}")
+        
+    kmeans.plot_clusters(args)
 
     avg_acc = np.mean(accuracies_log)
     std_dev = np.std(accuracies_log)

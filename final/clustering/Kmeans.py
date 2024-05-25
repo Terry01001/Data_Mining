@@ -58,7 +58,10 @@ class KMEANS:
             
             optimal = True
             for centroid in range(self.n_clusters):
-                if np.sum((self.centroids[centroid] - prev_centroids[centroid]) / prev_centroids[centroid]) > self.tol:
+                diff = self.centroids[centroid] - prev_centroids[centroid]
+                avoid_division_zero = np.where(prev_centroids[centroid] == 0, 1e-10, prev_centroids[centroid])
+                change = np.sum(diff / avoid_division_zero)
+                if abs(change) > self.tol:
                     optimal = False
                     break
 
@@ -92,13 +95,13 @@ class KMEANS:
         tsne = TSNE(n_components=2, random_state=42, perplexity=min(30, len(all_data)-1))
         transformed_data = tsne.fit_transform(all_data)
 
-        plt.figure(figsize=(10, 8))
+        plt.figure(figsize=(15, 10))
         scatter = plt.scatter(transformed_data[:, 0], transformed_data[:, 1], c=labels, cmap='inferno',alpha=0.6) # viridis
-        plt.colorbar(scatter)
+        # plt.colorbar(scatter)
         plt.title('Clusters visualized with t-SNE')
         plt.xlabel('t-SNE Feature 1')
         plt.ylabel('t-SNE Feature 2')
         # save fig
         datasetname = opts.data_path.split("/")[-1]
-        plt.savefig(f'{datasetname}_clusters_{opts.classify_algo}_{opts.k_value}_{opts.weight}.png')
+        plt.savefig(f'{opts.save_fig_dir}/{datasetname}_clusters_{opts.classify_algo}_{opts.k_value}_{opts.weight}.png')
 
