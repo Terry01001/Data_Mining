@@ -28,6 +28,22 @@ def load_data(opts):
         y_train = pd.read_csv(train_label)
         y_test = pd.read_csv(test_label)
 
+        X_train = X_train.drop(columns=['id'])
+        X_test = X_test.drop(columns=['id'])
+        y_train = y_train.drop(columns=['id'])
+        y_test = y_test.drop(columns=['id'])
+
+        class_mapping = {
+                    'KIRC': 1,
+                    'BRCA': 2,
+                    'LUAD': 3,
+                    'PRAD': 4,  
+                    'COAD': 5
+                }
+        y_train['Class'] = y_train['Class'].map(class_mapping)
+        y_test['Class'] = y_test['Class'].map(class_mapping)
+
+
     return X_train, y_train, X_test, y_test
 
 

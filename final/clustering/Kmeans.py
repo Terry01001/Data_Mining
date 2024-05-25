@@ -77,7 +77,7 @@ class KMEANS:
 
         return cluster
 
-    def plot_clusters(self):
+    def plot_clusters(self, opts):
         all_data = []
         labels = []
 
@@ -99,5 +99,6 @@ class KMEANS:
         plt.xlabel('t-SNE Feature 1')
         plt.ylabel('t-SNE Feature 2')
         # save fig
-        plt.savefig('clusters.png')
+        datasetname = opts.data_path.split("/")[-1]
+        plt.savefig(f'{datasetname}_clusters_{opts.classify_algo}_{opts.k_value}_{opts.weight}.png')
 

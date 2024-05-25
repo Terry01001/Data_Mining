@@ -18,6 +18,9 @@ def get_parser():
     parser.add_argument('--train_num_classes', type=int, help='The number of classes in the training dataset')
     parser.add_argument('--unknown_num_classes', type=int, help='The unknown number of classes in the test dataset')
 
+    parser.add_argument('--save_fig_dir', type=str, help='The path to save the figures')
+    parser.add_argument('--classify_algo', type=str, help='The algorithm to use for classification')
+
     # not used in this project
     parser.add_argument('--distance_metric',type=str, default='euclidean', help='The distance metric to use for the KNN classifier')
     parser.add_argument('--weight', type=str, default='uniform', help='The weighting scheme to use for the KNN classifier')
