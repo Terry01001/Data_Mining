@@ -91,6 +91,13 @@ class KMEANS:
         
         all_data = np.array(all_data)
 
+        if opts.classify_algo == "KNN":
+            figname = opts.data_path.split("/")[-1] + f'clusters_{opts.classify_algo}_{opts.k_value}_{opts.weight}'
+        elif opts.classify_algo == "SVM":
+            figname = f'clusters_{opts.classify_algo}_{opts.kernel}_' + opts.data_path.split("/")[-1]
+        elif opts.classify_algo == "NB":
+            figname = f'clusters_{opts.classify_algo}_' + opts.data_path.split("/")[-1] 
+
         # use tsne to reduce dimensionality and visualize
         tsne = TSNE(n_components=2, random_state=42, perplexity=min(30, len(all_data)-1))
         transformed_data = tsne.fit_transform(all_data)
@@ -102,6 +109,5 @@ class KMEANS:
         plt.xlabel('t-SNE Feature 1')
         plt.ylabel('t-SNE Feature 2')
         # save fig
-        datasetname = opts.data_path.split("/")[-1]
-        plt.savefig(f'{opts.save_fig_dir}/{datasetname}_clusters_{opts.classify_algo}_{opts.k_value}_{opts.weight}.png')
+        plt.savefig(f'{opts.save_fig_dir}/{figname}.png')
 

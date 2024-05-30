@@ -8,6 +8,8 @@ import utils
 import logging
 from sklearn.metrics import confusion_matrix, accuracy_score, precision_score, recall_score, f1_score
 from sklearn.neighbors import KNeighborsClassifier
+from sklearn.svm import SVC
+from sklearn.naive_bayes import GaussianNB
 
 def main(args):
     
@@ -20,17 +22,23 @@ def main(args):
     
     for trial in range(1,trials+1):
 
-        knn = KNeighborsClassifier(n_neighbors=args.k_value, weights=args.weight)
+        if args.classify_algo == "KNN":
+            cls_model = KNeighborsClassifier(n_neighbors=args.k_value, weights=args.weight)
+        elif args.classify_algo == "SVM":
+            cls_model = SVC(kernel=args.kernel,probability=True)
+        elif args.classify_algo == "NB":
+            cls_model = GaussianNB()
 
-        knn.fit(X_train, y_train)
-        classification_predictions = knn.predict(X_test)
+        cls_model.fit(X_train, y_train)
+        classification_predictions = cls_model.predict(X_test)
         
         # use a threshold to filter the confidece level, which is the probability of the class. Then use clustering to classify the data which is below the confidence level
         threshold = args.threshold
 
-        probabilities = knn.predict_proba(X_test)
+        probabilities = cls_model.predict_proba(X_test)
 
         low_confidence_indices = np.max(probabilities, axis=1) < threshold
+        print(np.max(probabilities, axis=1))
         low_confidence_samples = X_test[low_confidence_indices]
 
         # clustering
@@ -72,12 +80,18 @@ if __name__ == "__main__":
         os.makedirs(args.save_fig_dir,exist_ok=True)
 
     filemode = 'w'
-    logfilename = args.data_path.split("/")[-1]
-    
+
+    if args.classify_algo == "KNN":
+        logfilename = args.data_path.split("/")[-1] + f'_{args.classify_algo}_{args.k_value}_{args.weight}'
+    elif args.classify_algo == "SVM":
+        logfilename = f'{args.classify_algo}_{args.kernel}_' + args.data_path.split("/")[-1]
+    elif args.classify_algo == "NB":
+        logfilename = f'{args.classify_algo}_' + args.data_path.split("/")[-1] 
+        
     
 
     logging.basicConfig(
-        filename=os.path.join(args.save_dir, f'{logfilename}_{args.classify_algo}_{args.k_value}_{args.weight}.log'),
+        filename=os.path.join(args.save_dir, f'{logfilename}.log'),
         level=logging.INFO,
         format='%(asctime)s %(levelname)s %(message)s',
         filemode=filemode
