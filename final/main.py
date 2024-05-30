@@ -9,13 +9,18 @@ import logging
 from sklearn.metrics import confusion_matrix, accuracy_score, precision_score, recall_score, f1_score
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.svm import SVC
-from sklearn.naive_bayes import GaussianNB
+from xgboost import XGBClassifier
 
 def main(args):
     
     X_train, y_train, X_test, y_test = preprocessing.load_data(args)
     X_train, X_test = preprocessing.normalize_data(X_train, X_test)
     y_train = y_train.values.ravel()
+
+    if args.classify_algo == "XGB":
+        y_train = y_train - 1
+        y_test = y_test - 1
+    
 
     trials = 50
     accuracies_log = []
@@ -26,8 +31,10 @@ def main(args):
             cls_model = KNeighborsClassifier(n_neighbors=args.k_value, weights=args.weight)
         elif args.classify_algo == "SVM":
             cls_model = SVC(kernel=args.kernel,probability=True)
-        elif args.classify_algo == "NB":
-            cls_model = GaussianNB()
+        elif args.classify_algo == "XGB":
+            cls_model = XGBClassifier()
+
+        
 
         cls_model.fit(X_train, y_train)
         classification_predictions = cls_model.predict(X_test)
@@ -38,7 +45,6 @@ def main(args):
         probabilities = cls_model.predict_proba(X_test)
 
         low_confidence_indices = np.max(probabilities, axis=1) < threshold
-        print(np.max(probabilities, axis=1))
         low_confidence_samples = X_test[low_confidence_indices]
 
         # clustering
@@ -85,7 +91,7 @@ if __name__ == "__main__":
         logfilename = args.data_path.split("/")[-1] + f'_{args.classify_algo}_{args.k_value}_{args.weight}'
     elif args.classify_algo == "SVM":
         logfilename = f'{args.classify_algo}_{args.kernel}_' + args.data_path.split("/")[-1]
-    elif args.classify_algo == "NB":
+    elif args.classify_algo == "XGB":
         logfilename = f'{args.classify_algo}_' + args.data_path.split("/")[-1] 
         
     

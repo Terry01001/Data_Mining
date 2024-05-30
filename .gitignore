@@ -3,3 +3,6 @@
 *.txt
 *.zip
 *.pdf
+**/fig/**
+**/dataset/**
+**/__pycache__/**

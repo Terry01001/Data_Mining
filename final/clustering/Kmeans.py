@@ -95,7 +95,7 @@ class KMEANS:
             figname = opts.data_path.split("/")[-1] + f'clusters_{opts.classify_algo}_{opts.k_value}_{opts.weight}'
         elif opts.classify_algo == "SVM":
             figname = f'clusters_{opts.classify_algo}_{opts.kernel}_' + opts.data_path.split("/")[-1]
-        elif opts.classify_algo == "NB":
+        elif opts.classify_algo == "XGB":
             figname = f'clusters_{opts.classify_algo}_' + opts.data_path.split("/")[-1] 
 
         # use tsne to reduce dimensionality and visualize
